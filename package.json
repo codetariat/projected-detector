@@ -1,0 +1,25 @@
+{
+  "name": "projected-scanner",
+  "version": "1.0.0",
+  "description": "Scans items on roblox for their stats and saves them to a gist",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codetariat/projected-scanner.git"
+  },
+  "keywords": [
+    "roblox"
+  ],
+  "author": "codet",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/codetariat/projected-scanner/issues"
+  },
+  "homepage": "https://github.com/codetariat/projected-scanner#readme",
+  "dependencies": {
+    "node-fetch": "^3.2.4"
+  }
+}
