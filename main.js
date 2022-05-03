@@ -9,3 +9,6 @@ let b = JSON.parse(a.substr(0, a.indexOf(`]`)+1))
 console.log(b)
 
 */
+
+let gist = require('./modules/gist')
+
