@@ -4,7 +4,8 @@
   "description": "Scans items on roblox for their stats and saves them to a gist",
   "main": "main.js",
   "scripts": {
-    "test": "node main.js"
+    "test": "node main.js",
+    "run": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,6 @@
     "dotenv": "^16.0.0",
     "github-base": "github:codetariat/github-base",
     "node-fetch": "^3.2.4"
-  }
+  },
+  "type": "module"
 }

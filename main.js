@@ -10,5 +10,4 @@ console.log(b)
 
 */
 
-let gist = require('./modules/gist')
-
+import gist from './modules/gist.js'
