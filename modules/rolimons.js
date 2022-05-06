@@ -8,6 +8,13 @@ rolimons.itemTable;
 
 rolimons.getItemTable = async function(){
     let resp = await fetch('https://www.rolimons.com/itemtable')
+	.then(res=>{
+		if(!res.ok){
+			console.warn(`Rate limited on Rolimons.`)
+			process.exit(1)
+		}
+		return res
+	})
 	.then(res=>res.text())
 	.then(res=>res.substring(res.indexOf('var item_details = {'), res.length))
 	.then(res=>(res.substring(res.indexOf('{'),res.indexOf('};')+1)))
@@ -51,11 +58,17 @@ rolimons.getItemTable = async function(){
 rolimons.getHistoricDataFromItem = async function(id){
     let res = await fetch(`https://www.rolimons.com/item/${id}`).then(r=>r.text())
 
+	let historyDatesUnprocessed = res.substring(res.indexOf(`var history_data`) + (`var history_data`).length)
+    historyDatesUnprocessed = historyDatesUnprocessed.substring(historyDatesUnprocessed.indexOf(`"timestamp":[`) + (`"timestamp":`).length)
+    let historyDates = JSON.parse(historyDatesUnprocessed.substring(0, historyDatesUnprocessed.indexOf(`]`)+1))
+
     let bestPricesUnprocessed = res.substring(res.indexOf(`"best_price":[`) + (`"best_price":`).length)
     let bestPrices = JSON.parse(bestPricesUnprocessed.substring(0, bestPricesUnprocessed.indexOf(`]`)+1))
+	let bestPriceData = {}
 
     let rapHistoryUnprocessed = res.substring(res.indexOf(`"rap":[`) + `"rap":`.length)
     let rapHistory = JSON.parse(rapHistoryUnprocessed.substring(0, rapHistoryUnprocessed.indexOf(`]`)+1))
+	let rapHistoryData = {}
 
     let salesDatesUnprocessed = res.substring(res.indexOf(`var sales_data`) + (`var sales_data`).length)
     salesDatesUnprocessed = salesDatesUnprocessed.substring(salesDatesUnprocessed.indexOf(`"timestamp":[`) + (`"timestamp":`).length)
@@ -66,18 +79,27 @@ rolimons.getHistoricDataFromItem = async function(id){
 
     let salesData = {};
     let uniqueSaleDaysInLastMonth = 0;
+	let salesInLastMonth = 0;
 
     for(let k in salesDates){
         salesData[salesDates[k]] = salesVolume[k]
         if(salesDates[k] * 1000 > (Date.now() - (1000 * 60 * 60 * 24 * 30))){
             uniqueSaleDaysInLastMonth++;
+			salesInLastMonth += salesVolume[k]
         }
     }
 
+	for(let k in historyDates){
+		rapHistoryData[historyDates[k]] = rapHistory[k]
+		bestPriceData[historyDates[k]] = bestPrices[k]		
+	}
+
     let data = {
-        bestPrices,
-        rapHistory,
-        salesData
+        rapHistoryData,
+        bestPriceData,
+        salesData,
+		salesInLastMonth,
+		uniqueSaleDaysInLastMonth
     }
 
     return data
