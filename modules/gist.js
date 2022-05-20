@@ -1,12 +1,11 @@
 'use strict';
 import dotenv from 'dotenv'
-dotenv.config();
-
 import GitHub from 'github-base'
+import fetch from 'node-fetch'
+
+dotenv.config();
 const github = new GitHub({ token: process.env.GITHUB_TOKEN});
 const gist_id = '929307be574de178428d8e3d6710c382'
-
-import fetch from 'node-fetch'
 
 const gist = {}
 

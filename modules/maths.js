@@ -10,8 +10,8 @@ maths.truncate = function([...array], keep = .8){
     if(amountToRemove < 1){ return array }
 
     // Sort and slice array
-    array.sort((a,b)=>a-b)
-    array.slice(amountToRemove, -amountToRemove)
+    array = [...array].sort((a,b)=>a-b)
+    array = array.slice(amountToRemove, -amountToRemove)
     return array
 }
 

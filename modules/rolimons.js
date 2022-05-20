@@ -1,5 +1,4 @@
 'use strict'
-
 import fetch from 'node-fetch'
 
 const rolimons = {}
@@ -74,15 +73,21 @@ rolimons.getHistoricDataFromItem = async function(id){
     salesDatesUnprocessed = salesDatesUnprocessed.substring(salesDatesUnprocessed.indexOf(`"timestamp":[`) + (`"timestamp":`).length)
     let salesDates = JSON.parse(salesDatesUnprocessed.substring(0, salesDatesUnprocessed.indexOf(`]`)+1))
 
+	let salesDataUnprocessed = res.substring(res.indexOf(`var sales_data`) + (`var sales_data`).length)
+    salesDataUnprocessed = salesDataUnprocessed.substring(salesDataUnprocessed.indexOf(`"avg_daily_sales_price":[`) + (`"avg_daily_sales_price":`).length)
+    let sales = JSON.parse(salesDataUnprocessed.substring(0, salesDataUnprocessed.indexOf(`]`)+1))
+	let salesData = {};
+
     let salesVolumeUnprocessed = res.substring(res.indexOf(`"sales_volume":[`) + (`"sales_volume":`).length)
     let salesVolume = JSON.parse(salesVolumeUnprocessed.substring(0, salesVolumeUnprocessed.indexOf(`]`)+1))
 
-    let salesData = {};
+    let saleVolumeData = {};
     let uniqueSaleDaysInLastMonth = 0;
 	let salesInLastMonth = 0;
 
     for(let k in salesDates){
-        salesData[salesDates[k]] = salesVolume[k]
+        saleVolumeData[salesDates[k]] = salesVolume[k]
+		salesData[salesDates[k]] = sales[k]
         if(salesDates[k] * 1000 > (Date.now() - (1000 * 60 * 60 * 24 * 30))){
             uniqueSaleDaysInLastMonth++;
 			salesInLastMonth += salesVolume[k]
@@ -94,10 +99,13 @@ rolimons.getHistoricDataFromItem = async function(id){
 		bestPriceData[historyDates[k]] = bestPrices[k]		
 	}
 
+	sales.id = 'sales';
+
     let data = {
         rapHistoryData,
         bestPriceData,
-        salesData,
+        saleVolumeData,
+		salesData,
 		salesInLastMonth,
 		uniqueSaleDaysInLastMonth
     }

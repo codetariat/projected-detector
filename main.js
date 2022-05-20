@@ -27,35 +27,30 @@ async function determineTrueValue(assetId){
     // Check if it sells often (15 unique days, 30 sales in last month)
     let sellsOften = historicData.uniqueSaleDaysInLastMonth > 15 && historicData.salesInLastMonth > 30;
 
-    // Get only last 180 days worth of data except if sellsOften is true then it's 30
-    let days = (sellsOften && 180) || 30
+    // Cut off periods in historicData.rapHistoryData that are likely projected
+    historicData.rapHistoryData = util.cutOffLikelyProjectedPeriods(historicData.bestPriceData, historicData.rapHistoryData);
 
-    // Maybe: remove every non-unique repeating data point too as to only record changes in best price/rap?
+    // Get only last 180 days worth of data except if sellsOften is true then it's 30
+    let days = (!sellsOften && 180) || 30
+
     // Splice all elements from 30/180 days ago, truncate it, then get average
     let suspectedValueBasedOnBestPriceHistory = Math.round(util.truncatedSplicedAverage(historicData.bestPriceData, days));
     let suspectedValueBasedOnRapHistory = Math.round(util.truncatedSplicedAverage(historicData.rapHistoryData, days));
-
-    // Determine if item is big
-    let big;
-    let bigItemTreshold = 10000;
-
-    // Check if data on gist has suspected value (trueValue) and if it does, mark big as true if the suspected value is > bigItemTreshold
-    if(projectedData[assetId] && projectedData[assetId].trueValue){
-        big = projectedData[assetId].trueValue > bigItemTreshold
-    // Else check if suspected value based on price history/rap history is > bigItemTreshold
-    }else{
-        big = suspectedValueBasedOnBestPriceHistory > bigItemTreshold || suspectedValueBasedOnRapHistory > bigItemTreshold;
-    }
+    let suspectedValueBasedOnSales = Math.round(util.truncatedSplicedAverage(historicData.salesData, days))
 
     // Get lowest of the two and declare that the trueValue 
     let trueValue = Math.min(suspectedValueBasedOnBestPriceHistory, suspectedValueBasedOnRapHistory)
+    trueValue = Math.min(trueValue, suspectedValueBasedOnSales)
 
     // Calculate max deviation allowed
-    // 1.05 for smallest item (1000 RAP), 1.15 for bigger items (bigItemTreshold)
-    let maxDeviation = 0.0000111111111111 * (trueValue - 1000) + 1.05
+    // 1.075 for smallest item (1000 RAP), 1.25 for bigger items (bigItemTreshold)
+    let smallest = { x: 1000, y: 1.075 };
+    let biggest = { x: 10000, y: 1.25 };
+    let m = (biggest.y - smallest.y) / (biggest.x / biggest.y)
+    let maxDeviation = m * (trueValue - smallest.x) + smallest.y
 
     // Max is 1.15
-    maxDeviation = Math.round(Math.min(maxDeviation, 1.15) * 100) / 100
+    maxDeviation = Math.round(Math.min(maxDeviation, biggest.y) * 100) / 100
 
     // If defaultValue is bigger than trueValue * maxDeviation then it's proj
     let projected = itemTable[assetId].defaultValue > trueValue * maxDeviation
@@ -68,6 +63,7 @@ async function determineTrueValue(assetId){
     console.log(`uniqueSaleDaysInLastMonth = ${historicData.uniqueSaleDaysInLastMonth}`)
     console.log(`suspectedValueBasedOnBestPriceHistory = ${suspectedValueBasedOnBestPriceHistory}`)
     console.log(`suspectedValueBasedOnRapHistory = ${suspectedValueBasedOnRapHistory}`)
+    console.log(`suspectedValueBasedOnSales = ${suspectedValueBasedOnSales}`)
     console.log(`trueValue = ${trueValue}`)
     console.log(`lastRecordedRap = ${itemTable[assetId].defaultValue}`)
     console.log(`maxDeviation = ${maxDeviation}`)
@@ -87,7 +83,16 @@ async function main(){
     projectedData.counter = projectedData.counter || 0;
 
     projectedData.isProjected = function(assetId, suppliedRap){
-        
+        if(!suppliedRap){ 
+            console.warn(`projectedData.isProjected refused to run because no suppliedRap was given.`)
+            console.trace();
+        }
+
+        if(suppliedRap > this[assetId].trueValue * maxDeviation){
+            return trueValue
+        }else{
+            return false
+        }
     }
 
     // Index for the for-loop
@@ -111,6 +116,7 @@ async function main(){
     await gist.push(projectedData)
 }
 
+// Check if argument was passed
 let argument = process.argv[2]
 
 if(argument){
