@@ -73,6 +73,7 @@ async function determineTrueValue(assetId){
     // ========= =================== ========
 
     return {
+        assetName: itemTable[assetId].name,
         trueValue,
         maxDeviation
     }
@@ -84,8 +85,7 @@ async function main(){
 
     projectedData.isProjected = function(assetId, suppliedRap){
         if(!suppliedRap){ 
-            console.warn(`projectedData.isProjected refused to run because no suppliedRap was given.`)
-            console.trace();
+            console.trace(`ERROR: projectedData.isProjected() refused to run because no suppliedRap was given.`)
         }
 
         if(suppliedRap > this[assetId].trueValue * maxDeviation){
@@ -105,7 +105,7 @@ async function main(){
         if(index <= projectedData.counter){ continue }
 
         // Determine if given item is projected or not
-        let itemData = await determineProjected(assetId)
+        let itemData = await determineTrueValue(assetId)
         projectedData[assetId] = itemData
 
         // Stop looping if we've gone 5 items over counter (ie if index-1 >= counter)
