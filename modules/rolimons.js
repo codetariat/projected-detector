@@ -3,8 +3,6 @@ import fetch from 'node-fetch'
 
 const rolimons = {}
 
-rolimons.itemTable;
-
 rolimons.getItemTable = async function(){
     let resp = await fetch('https://www.rolimons.com/itemtable')
 	.then(res=>{
