@@ -20,14 +20,23 @@ Please consider contributing to the code to improve it and make it more usable f
 let projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
     .then(res => res.json())
 
-let realValue = projected.isProjected(27345567, 5000) // assetId, suppliedRAP are mandatory parameters
-if(realValue){
-    console.log(`This egg is projected. Its true suspected value is ${realValue}`)
+let assetId = 27345567
+let trueValue = projected.isProjected(assetId, 5000) // assetId, suppliedRAP are mandatory parameters
+if(trueValue){
+    console.log(`${projected[assetId].assetName} is projected. Its true suspected value is ${trueValue}`)
 }
 
 /* 
     output => This egg is projected. Its true suspected value is 1000
-    (or something similar to 1000) 
+    (or something similar to 1000)
+
+    if you need more data, call projected[assetId] => { 
+        assetName: "Fiery Egg of Egg Testing",
+        trueValue: ...,
+        maxDeviation: ...,
+    }
+
+    projected[assetId].maxDeviation denotes the % an item may be allowed to deviate from the trueValue before it's considered projected.
 */
 ```
 

@@ -21,6 +21,14 @@ let projectedData = await gist.get();
 let itemTable = await rolimons.getItemTable();
 
 async function determineTrueValue(assetId){
+    // Check if item has a value in itemTable
+    if(itemTable[assetId].value){
+        return {
+            assetName: itemTable[assetId].name,
+            trueValue: itemTable[assetId].value,
+            maxDeviation: -1,
+        }
+    }
     // Get historic data from rolimons graphs for item based on assetId
     let historicData = await rolimons.getHistoricDataFromItem(assetId);
 
@@ -88,7 +96,7 @@ async function main(){
             console.trace(`ERROR: projectedData.isProjected() refused to run because no suppliedRap was given.`)
         }
 
-        if(suppliedRap > this[assetId].trueValue * maxDeviation){
+        if(this[assetId].maxDeviation > 0 && suppliedRap > this[assetId].trueValue * this[assetId].maxDeviation){
             return trueValue
         }else{
             return false
@@ -101,18 +109,19 @@ async function main(){
     // Loop through the itemTable
     for(let assetId in itemTable){
         index++;
-        // If index is equal or smaller than the counter, continue
+        // If index is smaller than the counter, continue
         if(index <= projectedData.counter){ continue }
 
         // Determine if given item is projected or not
         let itemData = await determineTrueValue(assetId)
         projectedData[assetId] = itemData
 
-        // Stop looping if we've gone 5 items over counter (ie if index-1 >= counter)
+        // Stop looping if we've gone 5 items over counter (ie if index-5 >= counter)
         if(index - 5 >= projectedData.counter){ break }
     }
 
     // Save to gist
+    projectedData.counter = index;
     await gist.push(projectedData)
 }
 
