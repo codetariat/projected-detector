@@ -27,16 +27,16 @@ if(trueValue){
 }
 
 /* 
-    output => This egg is projected. Its true suspected value is 1000
+    output => Fiery Egg of Egg Testing is projected. Its true suspected value is 1000
     (or something similar to 1000)
 
-    if you need more data, call projected[assetId] => { 
+    if you need more data, call: projected[assetId] => { 
         assetName: "Fiery Egg of Egg Testing",
         trueValue: ...,
         maxDeviation: ...,
     }
 
-    projected[assetId].maxDeviation denotes the % an item may be allowed to deviate from the trueValue before it's considered projected.
+    projected[assetId].maxDeviation denotes the amount of times an item may be allowed to deviate from the trueValue before it's considered projected (e.g 105 means an item is allowed to deviate 5% from its trueValue)
 */
 ```
 
