@@ -92,9 +92,9 @@ async function main(){
     projectedData.counter = projectedData.counter || 0;
 
     projectedData.isProjected = function(assetId, suppliedRap){
-        if(!suppliedRap){ 
-            console.trace(`ERROR: projectedData.isProjected() refused to run because no suppliedRap was given.`)
-        }
+        if(isNaN(assetId)){console.trace(`ERROR: expected assetId (1st param of .isProjected) to be a number, got ${assetId}.`) }
+
+        if(isNaN(suppliedRap)){ console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${assetId}. suppliedRap is mandatory.`) }
 
         if(this[assetId].maxDeviation > 0 && suppliedRap > this[assetId].trueValue * this[assetId].maxDeviation){
             return trueValue

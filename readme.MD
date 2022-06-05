@@ -8,7 +8,7 @@ This is still in early development and has to be used very cautiously.
 
 ## Format
 
-The format is a JSON inside a raw gist file. The JSON also contains a function called isProjected which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, you have to supply the rap in the function.
+The format is a JSON inside a raw gist file. The JSON also contains a function called isProjected which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, it's mandatory to supply the rap in the .isProjected() function.
 
 ## Support
 
