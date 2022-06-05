@@ -1,6 +1,6 @@
 # Codet's Projected Detector
 
-This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about 2.5 days for the entire list to be updated.
+This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about ~66 hours (a little over 2.5 days) for the entire list to be updated.
 
 ## Status
 
