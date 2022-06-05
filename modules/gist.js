@@ -10,7 +10,7 @@ const gist_id = '929307be574de178428d8e3d6710c382'
 const gist = {}
 
 gist.push = async function(input){
-	let options = { files: { 'projecteds.json': { content: input } } }
+	let options = { files: { 'projecteds.json': { content: JSON.stringify(input, null, 3) } } }
 	github.patch('/gists/' + gist_id, options).catch(e => {console.trace(`CAUGHT ERROR: ${e}`)})
 }
 

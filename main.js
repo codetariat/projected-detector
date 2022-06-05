@@ -101,14 +101,15 @@ async function main(){
     // Loop through the itemTable
     for(let assetId in itemTable){
         index++;
-        // If index is equal or smaller than the counter, continue
-        if(index <= projectedData.counter){ continue }
+        projectedData.counter++;
+        // If index is smaller than the counter, continue
+        if(index < projectedData.counter){ continue }
 
         // Determine if given item is projected or not
         let itemData = await determineTrueValue(assetId)
         projectedData[assetId] = itemData
 
-        // Stop looping if we've gone 5 items over counter (ie if index-1 >= counter)
+        // Stop looping if we've gone 5 items over counter (ie if index-5 >= counter)
         if(index - 5 >= projectedData.counter){ break }
     }
 
