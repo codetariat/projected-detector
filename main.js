@@ -59,15 +59,15 @@ async function determineTrueValue(assetId){
     // ========= console.log factory ========
     let title = `==== item: ${itemTable[assetId].name} ====`
     console.log(title)
-    console.log(`salesInLastMonth = ${historicData.salesInLastMonth}`)
-    console.log(`uniqueSaleDaysInLastMonth = ${historicData.uniqueSaleDaysInLastMonth}`)
-    console.log(`suspectedValueBasedOnBestPriceHistory = ${suspectedValueBasedOnBestPriceHistory}`)
-    console.log(`suspectedValueBasedOnRapHistory = ${suspectedValueBasedOnRapHistory}`)
-    console.log(`suspectedValueBasedOnSales = ${suspectedValueBasedOnSales}`)
     console.log(`trueValue = ${trueValue}`)
     console.log(`lastRecordedRap = ${itemTable[assetId].defaultValue}`)
     console.log(`maxDeviation = ${maxDeviation}`)
     console.log(`projected = ${projected}`)
+    console.log(`suspectedValueBasedOnBestPriceHistory = ${suspectedValueBasedOnBestPriceHistory}`)
+    console.log(`suspectedValueBasedOnRapHistory = ${suspectedValueBasedOnRapHistory}`)
+    console.log(`suspectedValueBasedOnSales = ${suspectedValueBasedOnSales}`)
+    console.log(`uniqueSaleDaysInLastMonth = ${historicData.uniqueSaleDaysInLastMonth}`)
+    console.log(`salesInLastMonth = ${historicData.salesInLastMonth}`)
     console.log(`=`.repeat(title.length))
     // ========= =================== ========
     // ========= =================== ========
