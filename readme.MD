@@ -30,7 +30,7 @@ if(trueValue){
     output => This egg is projected. Its true suspected value is 1000
     (or something similar to 1000)
 
-    projected[assetId] => { 
+    if you need more data, call projected[assetId] => { 
         assetName: "Fiery Egg of Egg Testing",
         trueValue: ...,
         maxDeviation: ...,
