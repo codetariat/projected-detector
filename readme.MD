@@ -1,6 +1,6 @@
 # Codet's Projected Detector
 
-This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item.
+This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about 2.5 days for the entire list to be updated.
 
 ## Status
 
@@ -14,16 +14,16 @@ The format is a JSON inside a raw gist file. The JSON also contains a function c
 
 Please consider contributing to the code to improve it and make it more usable for other people in their projects as well.
 
-## Example usage
+## Example usage (JavaScript)
 
 ```javascript
-let projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
+const projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
     .then(res => res.json())
 
 let assetId = 27345567
 let trueValue = projected.isProjected(assetId, 5000) // assetId, suppliedRAP are mandatory parameters
 if(trueValue){
-    console.log(`${projected[assetId].assetName} is projected. Its true suspected value is ${trueValue}`)
+    console.log(`${projected[assetId].assetName} is projected. Its true suspected value is ${trueValue}.`)
 }
 
 /* 
@@ -36,7 +36,9 @@ if(trueValue){
         maxDeviation: ...,
     }
 
-    projected[assetId].maxDeviation denotes the amount of times an item may be allowed to deviate from the trueValue before it's considered projected (e.g 105 means an item is allowed to deviate 5% from its trueValue)
+    projected[assetId].maxDeviation denotes the amount of times an item may be allowed to
+    deviate from the trueValue before it's considered projected (e.g 105 means an item is
+    allowed to deviate 5% from its trueValue)
 */
 ```
 
