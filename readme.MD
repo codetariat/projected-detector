@@ -1,3 +1,5 @@
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/codetariat/projected-detector.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/codetariat/projected-detector/context:javascript)
+
 # Codet's Projected Detector
 
 This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about ~66 hours (a little over 2.5 days) for the entire list to be updated.
