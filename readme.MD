@@ -21,6 +21,9 @@ Please consider contributing to the code to improve it and make it more usable f
 ```javascript
 // source for isProjected function: ./modules/isProjected.js
 // https://raw.githubusercontent.com/codetariat/projected-detector/main/modules/isProjected.js
+const projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
+    .then(res => res.json())
+
 const isProjected = function(assetId, suppliedRap){
     if(isNaN(assetId)){
         console.trace(`ERROR: expected assetId (1st param of .isProjected) to be a number, got ${assetId}.`)
@@ -30,15 +33,12 @@ const isProjected = function(assetId, suppliedRap){
         console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${suppliedRap}. suppliedRap is mandatory`)
     }
 
-    if(this[assetId].maxDeviation > 0 && suppliedRap > this[assetId].trueValue * this[assetId].maxDeviation){
-        return trueValue
+    if(projected[assetId].maxDeviation > 0 && suppliedRap > projected[assetId].trueValue * projected[assetId].maxDeviation){
+        return projected[assetId].trueValue
     }else{
         return false
     }
 }
-
-const projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
-    .then(res => res.json())
 
 let assetId = 27345567
 let trueValue = isProjected(assetId, 5000) // assetId, suppliedRAP are mandatory parameters
