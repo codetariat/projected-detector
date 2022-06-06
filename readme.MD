@@ -10,7 +10,7 @@ This is still in early development and has to be used very cautiously.
 
 ## Format
 
-The format is a JSON inside a raw gist file. The JSON also contains a function called isProjected which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, it's mandatory to supply the rap in the .isProjected() function.
+The format is a JSON inside a raw gist file. There is also a recommended function called isProjected in the modules folder which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, it's mandatory to supply the rap in the .isProjected() function. However, you can create your own custom code with the list.
 
 ## Support
 
