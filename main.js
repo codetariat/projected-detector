@@ -16,6 +16,7 @@ import util from './modules/util.js'
 
 // Get existing array from gist
 let projectedData = await gist.get();
+console.log(projectedData)
 
 // Get rolimons itemTable array
 let itemTable = await rolimons.getItemTable();
@@ -90,18 +91,6 @@ async function determineTrueValue(assetId){
 async function main(){
     // If counter doesn't exist, initialise it with 0
     projectedData.counter = projectedData.counter || 0;
-
-    projectedData.isProjected = function(assetId, suppliedRap){
-        if(isNaN(assetId)){console.trace(`ERROR: expected assetId (1st param of .isProjected) to be a number, got ${assetId}.`) }
-
-        if(isNaN(suppliedRap)){ console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${assetId}. suppliedRap is mandatory.`) }
-
-        if(this[assetId].maxDeviation > 0 && suppliedRap > this[assetId].trueValue * this[assetId].maxDeviation){
-            return trueValue
-        }else{
-            return false
-        }
-    }
 
     // Index for the for-loop
     let index = 0;

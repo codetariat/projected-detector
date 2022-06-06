@@ -1,3 +1,5 @@
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/codetariat/projected-detector.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/codetariat/projected-detector/context:javascript)
+
 # Codet's Projected Detector
 
 This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about ~66 hours (a little over 2.5 days) for the entire list to be updated.
@@ -17,11 +19,29 @@ Please consider contributing to the code to improve it and make it more usable f
 ## Example usage (JavaScript)
 
 ```javascript
+// source for isProjected function: ./modules/isProjected.js
+// https://raw.githubusercontent.com/codetariat/projected-detector/main/modules/isProjected.js
+const isProjected = function(assetId, suppliedRap){
+    if(isNaN(assetId)){
+        console.trace(`ERROR: expected assetId (1st param of .isProjected) to be a number, got ${assetId}.`)
+    }
+
+    if(isNaN(suppliedRap)){
+        console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${suppliedRap}. suppliedRap is mandatory`)
+    }
+
+    if(this[assetId].maxDeviation > 0 && suppliedRap > this[assetId].trueValue * this[assetId].maxDeviation){
+        return trueValue
+    }else{
+        return false
+    }
+}
+
 const projected = await fetch(`https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw`)
     .then(res => res.json())
 
 let assetId = 27345567
-let trueValue = projected.isProjected(assetId, 5000) // assetId, suppliedRAP are mandatory parameters
+let trueValue = isProjected(assetId, 5000) // assetId, suppliedRAP are mandatory parameters
 if(trueValue){
     console.log(`${projected[assetId].assetName} is projected. Its true suspected value is ${trueValue}.`)
 }
@@ -42,6 +62,6 @@ if(trueValue){
 */
 ```
 
-## Gist
+## Gist containing list of projecteds
 
 The gist can be found [here](https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw).
