@@ -62,6 +62,6 @@ if(trueValue){
 */
 ```
 
-## Gist
+## Gist containing list of projecteds
 
 The gist can be found [here](https://gist.githubusercontent.com/codetariat/929307be574de178428d8e3d6710c382/raw).
