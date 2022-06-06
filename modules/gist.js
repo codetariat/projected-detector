@@ -16,13 +16,10 @@ gist.push = async function(input){
 
 gist.get = async function(){
     return await fetch(`https://gist.githubusercontent.com/codetariat/${gist_id}/raw`).then(r => {
-		// check if response is valid JSON
-		var isValidJSON = true;
-		try { JSON.parse(jsonString) } catch { isValidJSON = false }
-		if(isValidJSON){
+		try {
 			return r.json()
-		} else {
-			return {}
+		} catch (e) {
+			console.trace(e)
 		}
 	})
 }
