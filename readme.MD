@@ -2,7 +2,15 @@
 
 # Codet's Projected Detector
 
-This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about ~66 hours (a little over 2.5 days) for the entire list to be updated.
+This is my effort to create a maintained and accurate projected detector for Roblox through gist. It uses data from Rolimon's and Roblox's own sales chart in order to find the true value for an item. It takes about ~66 hours (a little over 2.5 days) for the entire list to be updated. This is the algorithm that adds or updates items to the gist and determines their trueValue and maxDeviation.
+
+### trueValue
+
+trueValue is a datapoint which is the suspected true value as found out by the algorithm (which is in this open-source repo)
+
+### maxDeviation
+
+maxDeviation is the treshold at which an item is allowed to deviate from. For example, if the maxDeviation is 1.05, it means an item can't deviate more than 5% from its trueValue otherwise it is considered projected.
 
 ## Status
 
@@ -10,7 +18,7 @@ This is still in early development and has to be used very cautiously.
 
 ## Format
 
-The format is a JSON inside a raw gist file. The JSON also contains a function called isProjected which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, it's mandatory to supply the rap in the .isProjected() function.
+The output format is a JSON inside a raw gist file. There is also a recommended function called isProjected in the modules folder which will either return false or the trueValue in case an item is projected. Because I'm unable to include up-to-date RAP in the gist, it's mandatory to supply the rap in the .isProjected() function. However, you can create your own custom code with the list.
 
 ## Support
 
