@@ -52,30 +52,30 @@ async function determineTrueValue(assetId){
     trueValue = Math.min(trueValue, suspectedValueBasedOnSales)
 
     // Calculate max deviation allowed
-    // 1.075 for smallest item (1000 RAP), 1.3 for bigger items (bigItemTreshold)
+    // 1.075 for smallest item (1000 RAP), 1.3 for bigger items (5000 RAP)
     let smallestDev = { x: 1000, y: 1.075 };
-    let biggestDev = { x: 5000, y: 1.25 };
-    let m = (biggestDev.y - smallestDev.y) / (biggestDev.x / biggestDev.y)
+    let biggestDev =  { x: 5000, y: 1.25  };
+    let m = (biggestDev.y - smallestDev.y) / (biggestDev.x - smallestDev.x)
     let maxDeviation = m * (trueValue - smallestDev.x) + smallestDev.y
+    maxDeviation = Math.max(maxDeviation, smallestDev.y)
+    maxDeviation = Math.min(maxDeviation, biggestDev.y)
 
-    // Multiplier: 1 for most sold item (30 uniqueSaleDaysInLastMonth), 1.3 for less sold item (1 uniqueSaleDaysInLastMonth)
-    let smallestMultiplier = { x: 30, y: 1 }
-    let biggestMultiplier = { x: 1, y: 1.3 }
-    let m2 = (biggestMultiplier.y - smallestMultiplier.y) / (biggestMultiplier.x / biggestMultiplier.y)
-    let multiplier = m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMultiplier.x) + smallestMultiplier.y
+    // Multiplier: 1 for most sold item (30 uniqueSaleDaysInLastMonth), 1.3 for less sold item (1 uniqueSaleDaysInLastMonth
+    let smallestMult = { x: 30, y: 1   };
+    let biggestMult =  { x: 1,  y: 1.3 };
+    let m2 = (biggestMult.y - smallestMult.y) / (biggestMult.x - smallestMult.x)
+    let multiplier = m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMult.x) + smallestMult.y
+    multiplier = Math.max(multiplier, smallestMult.y)
+    multiplier = Math.min(multiplier, biggestMult.y)
 
-    maxDeviation *= multiplier
-
-    let absoluteMaxDeviation = biggestDev.y * biggestMultiplier.y;
-    
-    maxDeviation = Math.round(Math.min(maxDeviation, absoluteMaxDeviation) * 100) / 100
+    maxDeviation = Math.round(maxDeviation * multiplier * 100) / 100
 
     // If defaultValue is bigger than trueValue * maxDeviation then it's proj
     let projected = itemTable[assetId].defaultValue > trueValue * maxDeviation
 
     // ========= =================== ========
     // ========= console.log factory ========
-    let title = `==== item: ${itemTable[assetId].name} ====`
+    let title = `============ item: ${itemTable[assetId].name} ============`
     console.log(title)
     console.log(`trueValue = ${trueValue}`)
     console.log(`lastRecordedRap = ${itemTable[assetId].defaultValue}`)
