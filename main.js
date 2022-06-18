@@ -56,13 +56,13 @@ async function determineTrueValue(assetId){
     let smallestDev = { x: 1000, y: 1.075 };
     let biggestDev = { x: 5000, y: 1.25 };
     let m = (biggestDev.y - smallestDev.y) / (biggestDev.x / biggestDev.y)
-    let maxDeviation = Math.min(biggestDev.y, m * (trueValue - smallestDev.x) + smallestDev.y);
+    let maxDeviation = Math.min(biggestDev.y, m * (trueValue - smallestDev.x), smallestDev.y);
 
     // Multiplier: 1 for most sold item (30 uniqueSaleDaysInLastMonth), 1.3 for less sold item (1 uniqueSaleDaysInLastMonth)
     let smallestMultiplier = { x: 30, y: 1 }
     let biggestMultiplier = { x: 1, y: 1.3 }
     let m2 = (biggestMultiplier.y - smallestMultiplier.y) / (biggestMultiplier.x / biggestMultiplier.y)
-    let multiplier = Math.min(biggestMultiplier.y, m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMultiplier.x) + smallestMultiplier.y)
+    let multiplier = Math.min(biggestMultiplier.y, m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMultiplier.x), smallestMultiplier.y)
     
     maxDeviation = Math.round(maxDeviation * multiplier) * 100 / 100
 
