@@ -52,14 +52,23 @@ async function determineTrueValue(assetId){
     trueValue = Math.min(trueValue, suspectedValueBasedOnSales)
 
     // Calculate max deviation allowed
-    // 1.075 for smallest item (1000 RAP), 1.25 for bigger items (bigItemTreshold)
-    let smallest = { x: 1000, y: 1.075 };
-    let biggest = { x: 10000, y: 1.25 };
-    let m = (biggest.y - smallest.y) / (biggest.x / biggest.y)
-    let maxDeviation = m * (trueValue - smallest.x) + smallest.y
+    // 1.075 for smallest item (1000 RAP), 1.3 for bigger items (bigItemTreshold)
+    let smallestDev = { x: 1000, y: 1.075 };
+    let biggestDev = { x: 5000, y: 1.25 };
+    let m = (biggestDev.y - smallestDev.y) / (biggestDev.x / biggestDev.y)
+    let maxDeviation = m * (trueValue - smallestDev.x) + smallestDev.y
 
-    // Max is 1.15
-    maxDeviation = Math.round(Math.min(maxDeviation, biggest.y) * 100) / 100
+    // Multiplier: 1 for most sold item (30 uniqueSaleDaysInLastMonth), 1.3 for less sold item (1 uniqueSaleDaysInLastMonth)
+    let smallestMultiplier = { x: 30, y: 1 }
+    let biggestMultiplier = { x: 1, y: 1.3 }
+    let m2 = (biggestMultiplier.y - smallestMultiplier.y) / (biggestMultiplier.x / biggestMultiplier.y)
+    let multiplier = m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMultiplier.x) + smallestMultiplier.y
+
+    maxDeviation *= multiplier
+
+    let absoluteMaxDeviation = biggestDev.y * biggestMultiplier.y;
+    
+    maxDeviation = Math.round(Math.min(maxDeviation, absoluteMaxDeviation) * 100) / 100
 
     // If defaultValue is bigger than trueValue * maxDeviation then it's proj
     let projected = itemTable[assetId].defaultValue > trueValue * maxDeviation
