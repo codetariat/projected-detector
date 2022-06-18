@@ -42,8 +42,10 @@ const isProjected = function(assetId, suppliedRap){
     }
 
     if(isNaN(suppliedRap)){
-        console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${suppliedRap}. suppliedRap is mandatory`)
+        console.trace(`ERROR: expected suppliedRap (2nd param of .isProjected) to be a number, got ${suppliedRap}.`)
     }
+
+    if(!(projected[assetId])){ console.trace(`ERROR: expected projected[assetId], got ${projected[assetId]}.`) }
 
     if(projected[assetId].maxDeviation > 0 && suppliedRap > projected[assetId].trueValue * projected[assetId].maxDeviation){
         return projected[assetId].trueValue

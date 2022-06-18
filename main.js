@@ -112,8 +112,8 @@ async function main(){
     // Save to gist
     projectedData.counter = index;
 
-    // if counter > itemTable.length then reset counter to 0
-    if(projectedData.counter > Object.keys(itemTable).length){
+    // if counter >= itemTable.length then reset counter to 0
+    if(projectedData.counter >= Object.keys(itemTable).length){
         projectedData.counter = 0;
     }
 
