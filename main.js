@@ -47,7 +47,11 @@ async function determineTrueValue(assetId){
     let suspectedValueBasedOnRapHistory = Math.round(util.truncatedSplicedAverage(historicData.rapHistoryData, days));
     let suspectedValueBasedOnSales = Math.round(util.truncatedSplicedAverage(historicData.salesData, days))
 
-    // Get lowest of the two and declare that the trueValue 
+    // Get lowest of the three and declare that the trueValue unless one of them is equal to zero
+    if(suspectedValueBasedOnSales == 0){ // Account for glitched graphs
+        suspectedValueBasedOnSales = suspectedValueBasedOnRapHistory;
+    }
+
     let trueValue = Math.min(suspectedValueBasedOnBestPriceHistory, suspectedValueBasedOnRapHistory)
     trueValue = Math.min(trueValue, suspectedValueBasedOnSales)
 
