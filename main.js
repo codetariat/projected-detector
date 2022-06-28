@@ -9,7 +9,6 @@ Step 3. get 5 items
 Step 7. save to gist with a counter
 
 */
-
 import gist from './modules/gist.js'
 import rolimons from './modules/rolimons.js'
 import util from './modules/util.js'
@@ -21,9 +20,9 @@ console.log(projectedData)
 // Get rolimons itemTable array
 let itemTable = await rolimons.getItemTable();
 
-async function determineTrueValue(assetId){
+async function determineTrueValue(assetId) {
     // Check if item has a value in itemTable
-    if(itemTable[assetId].value){
+    if (itemTable[assetId].value) {
         return {
             assetName: itemTable[assetId].name,
             trueValue: itemTable[assetId].value,
@@ -48,7 +47,7 @@ async function determineTrueValue(assetId){
     let suspectedValueBasedOnSales = Math.round(util.truncatedSplicedAverage(historicData.salesData, days))
 
     // Get lowest of the three and declare that the trueValue unless one of them is equal to zero
-    if(suspectedValueBasedOnSales == 0){ // Account for glitched graphs
+    if (suspectedValueBasedOnSales == 0) { // Account for glitched graphs
         suspectedValueBasedOnSales = suspectedValueBasedOnRapHistory;
     }
 
@@ -57,16 +56,28 @@ async function determineTrueValue(assetId){
 
     // Calculate max deviation allowed
     // 1.075 for smallest item (1000 RAP), 1.3 for bigger items (5000 RAP)
-    let smallestDev = { x: 1000, y: 1.075 };
-    let biggestDev =  { x: 5000, y: 1.25  };
+    let smallestDev = {
+        x: 1000,
+        y: 1.075
+    };
+    let biggestDev = {
+        x: 5000,
+        y: 1.25
+    };
     let m = (biggestDev.y - smallestDev.y) / (biggestDev.x - smallestDev.x)
     let maxDeviation = m * (trueValue - smallestDev.x) + smallestDev.y
     maxDeviation = Math.max(maxDeviation, smallestDev.y)
     maxDeviation = Math.min(maxDeviation, biggestDev.y)
 
     // Multiplier: 1 for most sold item (30 uniqueSaleDaysInLastMonth), 1.3 for less sold item (1 uniqueSaleDaysInLastMonth
-    let smallestMult = { x: 30, y: 1   };
-    let biggestMult =  { x: 1,  y: 1.3 };
+    let smallestMult = {
+        x: 30,
+        y: 1
+    };
+    let biggestMult = {
+        x: 1,
+        y: 1.3
+    };
     let m2 = (biggestMult.y - smallestMult.y) / (biggestMult.x - smallestMult.x)
     let multiplier = m2 * (historicData.uniqueSaleDaysInLastMonth - smallestMult.x) + smallestMult.y
     multiplier = Math.max(multiplier, smallestMult.y)
@@ -101,7 +112,7 @@ async function determineTrueValue(assetId){
     }
 }
 
-async function main(){
+async function main() {
     // If counter doesn't exist, initialise it with 0
     projectedData.counter = projectedData.counter || 0;
 
@@ -109,24 +120,28 @@ async function main(){
     let index = 0;
 
     // Loop through the itemTable
-    for(let assetId in itemTable){
+    for (let assetId in itemTable) {
         index++;
         // If index is smaller than the counter, continue
-        if(index <= projectedData.counter){ continue }
+        if (index <= projectedData.counter) {
+            continue
+        }
 
         // Determine if given item is projected or not
         let itemData = await determineTrueValue(assetId)
         projectedData[assetId] = itemData
 
         // Stop looping if we've gone 5 items over counter (ie if index-5 >= counter)
-        if(index - 5 >= projectedData.counter){ break }
+        if (index - 5 >= projectedData.counter) {
+            break
+        }
     }
 
     // Save to gist
     projectedData.counter = index;
 
     // if counter >= itemTable.length then reset counter to 0
-    if(projectedData.counter >= Object.keys(itemTable).length){
+    if (projectedData.counter >= Object.keys(itemTable).length) {
         projectedData.counter = 0;
     }
 
@@ -136,8 +151,8 @@ async function main(){
 // Check if argument was passed
 let argument = process.argv[2]
 
-if(argument){
+if (argument) {
     determineTrueValue(argument)
-}else{
+} else {
     main();
 }
